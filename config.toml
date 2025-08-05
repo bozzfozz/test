@@ -1,0 +1,11 @@
+username = "your_slsk_username"
+password = "your_slsk_password"
+
+[network]
+port = 2234
+
+[search]
+max_results = 10
+
+[downloads]
+folder = "/downloads"
