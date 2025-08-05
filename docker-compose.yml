@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  slskd:
+    image: ghcr.io/slskd/slskd:latest
+    container_name: slskd
+    volumes:
+      - ./slskd:/config
+      - ./downloads:/downloads
+    ports:
+      - "5030:5030"
+    environment:
+      - SLSKD_CONFIG=/config/config.toml
+    restart: unless-stopped
+
+  downloader:
+    build: ./app
+    container_name: spotify_downloader
+    depends_on:
+      - slskd
+    volumes:
+      - ./app:/app
+      - ./downloads:/downloads
+    environment:
+      - SPOTIFY_CLIENT_ID=your_id
+      - SPOTIFY_CLIENT_SECRET=your_secret
+      - PLAYLIST_URL=https://open.spotify.com/playlist/xyz
+      - SLSKD_API=http://slskd:5030/api
+      - SLSK_USER=your_slsk_username
+      - SLSK_PASS=your_slsk_password
+    command: ["python", "main.py"]
